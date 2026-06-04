@@ -1,0 +1,35 @@
+services:
+  app:
+    build: .
+    container_name: reviews_api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+  db:
+    image: postgres:16
+    container_name: reviews_db
+    environment:
+      POSTGRES_DB: reviewsdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  redis:
+    image: redis:7
+    container_name: reviews_redis
+    ports:
+      - "6380:6379"
+    restart: always
+
+volumes:
+  postgres_data:
